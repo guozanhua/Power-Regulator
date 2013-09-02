@@ -1,0 +1,6 @@
+Power Regulator is one virtualized cluster management software, which is used to 
+cap power in heterogeneous virtualized cluster. It is implemented with C and deployed
+in Xen based virtualized environment.
+The motivation of this work is power peaking caused by GPU based VM execution, increasing
+the maximum configured power of PDU (power distributed unit). Therefore, the proposed 
+Power Regulator, caps the maximum power within tolerated performance degradation.

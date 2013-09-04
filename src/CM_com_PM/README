@@ -1,0 +1,2 @@
+This folder implements cluster establishment between cluster manager (CM) and physical machine (PM).
+It includes basic naming mechanism and protocol design.

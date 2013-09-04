@@ -1,0 +1,7 @@
+This folder implements basic data structures and functions of lower network layer of the cluster management.
+The whole implementation is based on Linux IPv4 Internet domain. It uses SOCK_STREAM socket on TCP protocol.
+It mainly contains the following four files:
+NetLayer.h          -->> Header file
+NetLayer_General.c  -->> General methods of network socket operations
+NetLayer_Client.c   -->> Client methods of network socket operations
+NetLayer_Server.c   -->> Server methods of network socket operations

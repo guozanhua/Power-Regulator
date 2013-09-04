@@ -4,6 +4,7 @@
 */
 #ifndef _NETLAYER_H
 #define _NETLAYER_H
+#include <unistd.h>
 
 #define MAXSLEEP 128   //The maximum sleep time for exponential backoff algorithm
 #define MAX_CONNECT 64 //The maximun connection number for each service

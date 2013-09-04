@@ -5,8 +5,7 @@ LIB=libnetlayer.a
 
 $(LIB):$(OBJECTS)
 	ar -r $(LIB) $(OBJECTS)
-	cp NetLayer.h ../CM_com_PM/
-	cp $(LIB)     ../CM_com_PM/
+	cp $(LIB) ../CM_com_PM/
 NetLayer_Client.o : NetLayer.h NetLayer_Client.c
 	$(CC) $(CFLAGS) -c NetLayer_Client.c
 NetLayer_Server.o : NetLayer.h NetLayer_Server.c

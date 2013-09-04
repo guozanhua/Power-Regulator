@@ -2,6 +2,9 @@
 ** Author: Ming Liu
 ** Description: Implement the functions of general methods in NetLayer.h
 */
+#include <stdio.h>
+#include <sys/socket.h>
+#include <errno.h>
 #include "NetLayer.h"
 
 int init_socket()

@@ -2,6 +2,10 @@
 ** Author: Ming Liu
 ** Description: Implement the functions of server side in NetLayer.h
 */
+#include <stdio.h>
+#include <sys/socket.h>
+#include <string.h>
+#include <netinet/in.h>
 #include "NetLayer.h"
 
 int init_server(PORT_NUM service, int sockfd)

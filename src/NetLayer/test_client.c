@@ -4,6 +4,7 @@
 */
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "NetLayer.h"
 
 #define BUFFER_SIZE 1024

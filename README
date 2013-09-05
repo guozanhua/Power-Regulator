@@ -4,3 +4,8 @@ in Xen based virtualized environment.
 The motivation of this work is power peaking caused by GPU based VM execution, increasing
 the maximum configured power of PDU (power distributed unit). Therefore, the proposed 
 Power Regulator, caps the maximum power within tolerated performance degradation.
+Requirement:
+(a). All physical machine should based on Xen virtualzied environment with xend(xm) and xenpm module support. 
+(b). "eth0" should be used as NIC.
+(c). Physical machine should connect with wattsup device for power monitoring. The connected 
+     interface is ttyUSB0.

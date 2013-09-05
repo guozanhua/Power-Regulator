@@ -34,6 +34,9 @@ typedef struct physical_machine{
     PM_CORE *active_core;                   //Active core list of this physical machine
 }PM;
 
-int PM2CM_Client_start(PORT_NUM cli_port, char *ip);         //Error return -1; Success return 0
+PM* PM_init();                              		     //PM Client Side Initialization
+							     //Error return NULL; Success return the pointer
+int PM2CM_Client_start(PORT_NUM cli_port, char *ip);         //Start PM_TO_CM Client side service
+							     //Error return -1; Success return 0
  
 #endif

@@ -124,8 +124,10 @@ PM* PM_init()
 
     server = (PM*)malloc(sizeof(PM));
     memset(server, 0x00, sizeof(PM));
+    system("xenpm set-scaling-governor userspace");
 
     server->PM_ID = -1;                       //This will be reassigned via coordinator.
+    server->active_core = NULL;
     PM_set_Power(&(server->idle_power));
     PM_set_Power(&(server->curr_power));
     PM_set_ip(server);
@@ -147,8 +149,138 @@ PM* PM_init()
 		printf("%d ", server->freq_list[i]);
 	}
 	printf("\n");
+        printf("**************Initialization OVER***************\n");
     }
 #endif
 
     return server;
+}
+
+int PM_get_CORE_STATE(int core, PM *phymach)
+{
+    FILE *in;
+    char buff[BUFFER_SIZE];
+    char cmd[BUFFER_SIZE];
+    char small_buff[BUFFER_SIZE];
+    int i = 0, freq;
+
+    memset(buff, 0x00, sizeof(buff));
+    memset(cmd, 0x00, sizeof(cmd));
+    memset(small_buff, 0x00, sizeof(small_buff));
+
+    sprintf(small_buff, "%d", core);
+    strcpy(cmd, "xenpm get-cpufreq-para ");
+    strcat(cmd, small_buff); 
+
+    in = popen(cmd, "r");
+
+    while (i < 7)
+    {
+	if (fgets(buff, BUFFER_SIZE, in) == NULL)
+        {
+	    printf("xenpm get-cpufreq-para isn't available!\n");
+	    return 0;
+        }
+	i++;
+    }
+
+    fgets(buff, BUFFER_SIZE, in);
+    for (i = 0; buff[i] != '\0'; i++)
+    {
+	if( !isdigit(buff[i]) )
+	    buff[i] = ' ';
+    }
+
+    sscanf(buff, "%d", &freq);
+
+    for (i = 0; i < FREQUENCY_LIST_LENGTH; i++)
+    {
+	if (phymach->freq_list[i] == freq)
+	    return i;
+    }
+
+    pclose(in);
+
+    return 0;
+}
+
+void PM_add_VM(PM* phymach, int vm_id, int core_id)
+{
+    PM_CORE *p, *t , *q = NULL;
+    VM *du, *dq, *dt;
+
+    p = t = phymach->active_core;
+    while (p != NULL)
+    {
+	t = p;
+	if (p->CORE_ID == core_id)
+	    break;
+	p = p->next;
+    }
+
+    if (p == NULL)
+    {
+	du = (VM *)malloc(sizeof(VM));
+	memset(du, 0x00, sizeof(VM));
+	du->VM_ID = vm_id;
+	du->next = NULL;
+
+	q = (PM_CORE *)malloc(sizeof(PM_CORE));
+	memset(q, 0x00, sizeof(PM_CORE));
+	q->CORE_ID = core_id;
+	q->active_VM = du;
+	q->current_state = PM_get_CORE_STATE(core_id, phymach);
+	q->next = NULL;
+
+	if (phymach->active_core == NULL)
+	    phymach->active_core = q;
+	else
+	    t->next = q;
+    }
+    else
+    {
+	dq = du = p->active_VM;
+
+	while (du != NULL)
+	{
+	    dq = du;
+	    if (du->VM_ID == vm_id)
+		break;
+	    du = du->next;
+	}
+
+	if (du == NULL)
+	{
+	    dt = (VM *)malloc(sizeof(VM));
+	    memset(dt, 0x00, sizeof(VM));
+	    dt->VM_ID = vm_id;
+	    dt->next = NULL;
+
+	    dq->next = dt;
+	}
+    }
+}
+
+int PM_obtainVM_info(PM* p)
+{
+    FILE *in;
+    char buff[BUFFER_SIZE];
+    char small_buff[SMALL_BUFFER_SIZE];
+    int id, vcpu, cpu;
+   
+    memset(buff, 0x00, sizeof(buff)); 
+    in = popen("xm vcpu-list", "r");
+
+    fgets(buff, BUFFER_SIZE, in);
+
+    while (fgets(buff, BUFFER_SIZE,in) != NULL)
+    {
+	sscanf(buff, "%s %d %d %d", small_buff, &id, &vcpu, &cpu);
+	if (id == 0)
+	    continue;
+	PM_add_VM(p, id, cpu);
+    }
+
+    pclose(in);
+    return 0;
 }

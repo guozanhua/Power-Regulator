@@ -38,5 +38,7 @@ PM* PM_init();                              		     //PM Client Side Initializati
 							     //Error return NULL; Success return the pointer
 int PM2CM_Client_start(PORT_NUM cli_port, char *ip);         //Start PM_TO_CM Client side service
 							     //Error return -1; Success return 0
+int PM_obtainVM_info(PM *p);                                 //Obtain VM information
+							     //Error return -1; Success return 0
  
 #endif

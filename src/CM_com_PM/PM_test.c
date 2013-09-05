@@ -11,6 +11,8 @@ int main(int argc, char **argv)
 {
     PORT_NUM t = P2C;
     PM* local_pm = NULL;
+    PM_CORE* p;
+    VM*      q;
 
     if (argc != 2)
     {
@@ -23,6 +25,34 @@ int main(int argc, char **argv)
 	printf("PM initialization error!\n");
 	exit(0);
     }
+
+    if ( PM_obtainVM_info(local_pm) )
+    {
+	printf("PM obtain VM information error!\n");
+	exit(0);
+    }
+
+    {
+	// For Test
+	p = local_pm->active_core;
+	while (p != NULL)
+	{
+	    printf("======>");
+	    printf("CORE ID: %d\n", p->CORE_ID); 
+	    printf("CORE STATE: %d\n", p->current_state);
+	    q = p->active_VM;
+	    printf("VM ID: ");
+	    while (q != NULL)
+	    {
+		printf("%d ", q->VM_ID);
+		q = q->next;
+	    }
+	    printf("\n");
+
+	    p = p->next;
+	}
+    }
+
 
     if ( PM2CM_Client_start(t, argv[1]) )
     {

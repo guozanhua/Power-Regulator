@@ -9,6 +9,11 @@
 #define MAX_CONNECT 64 //The maximun connection number for each service
 
 typedef enum{
+    PM_ASK_PERF,
+    PM_CHECK_VM
+}ACTION;
+
+typedef enum{
     P2C = 2000,
     C2P = 2001,
     P2V = 2002,

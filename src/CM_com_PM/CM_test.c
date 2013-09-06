@@ -4,7 +4,7 @@
 */
 #include <stdlib.h>
 #include <stdio.h>
-#include "CM_server.h"
+#include "CMPM_cm_agent.h"
 #include "NetLayer.h"
 
 int main(int argc, char **argv)

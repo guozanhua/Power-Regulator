@@ -1,0 +1,2 @@
+This folder implements basic communication details between cluster manager and physical machine.
+It includes the basic protocol desgin.

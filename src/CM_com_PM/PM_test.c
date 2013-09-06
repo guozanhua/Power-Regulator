@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "NetLayer.h"
-#include "PM_client.h"
+#include "CMPM_pm_agent.h"
 
 int main(int argc, char **argv)
 {
